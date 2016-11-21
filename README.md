@@ -12,8 +12,7 @@ As for now, this platform game is not yet finished. The uploaded codes only cont
 P.S:  
 The sprites, backgrounds, and tileset used in the program are all creator original.
 
-Controls :
-
+Controls :  
 arrow key (right and left) = move right and left  
 space bar = jump  
 X = glide (must be jumping or falling)  
