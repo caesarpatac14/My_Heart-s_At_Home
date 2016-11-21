@@ -14,7 +14,13 @@ The sprites, backgrounds, and tileset used in the program are all creator origin
 
 Controls :
 
-arrow key (right and left) = move right and left space bar = jump space bar + x = glide A = sword attack S = fire attack esc = pause game enter = return to game
+arrow key (right and left) = move right and left
+space bar = jump
+X = glide (must be jumping or falling)
+A = sword attack
+S = fire attack
+esc = pause game
+enter = return to game
 
 This game is a project to be submitted for CMSC22 course. Members:
 
