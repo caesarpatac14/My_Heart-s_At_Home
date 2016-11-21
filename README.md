@@ -9,7 +9,8 @@ My Heart's At Home is a platformer game with Caesar as the main player which aim
 
 As for now, this platform game is not yet finished. The uploaded codes only contain level 1 without the boss fight. In this level, Caesar needs to face a single type of enemy. He (Caesar) has four maximum number of life and five maximum number of health.
 
-The sprites, backgrounds, and tileset used in the program are all creator original. Although the music used is a copyright from the internet.
+P.S
+The sprites, backgrounds, and tileset used in the program are all creator original.
 
 Controls :
 
