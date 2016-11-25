@@ -32,5 +32,8 @@ public class Content {
     public static BufferedImage[][] DarkEnergy = load("/SP/For_the_game/DarkEnergy.gif", 20, 20);
     public static BufferedImage[][] BoomSprite = load("/SP/For_the_game/boom.gif", 30, 30);
     public static BufferedImage[][] OgreEnemy = load("/SP/For_the_game/walkAttackEnemy1.png", 65, 66);
+    public static BufferedImage[][] VankyEnemy = load("/SP/For_the_game/walkSpearEnemy2.png", 64, 74);
+    public static BufferedImage[][] BossEnemy = load("/SP/For_the_game/BOSS.png", 274, 166);
+    public static BufferedImage[][] JumpingEnemy = load("/SP/For_the_game/Tengu.gif", 30, 30);
 
 }
