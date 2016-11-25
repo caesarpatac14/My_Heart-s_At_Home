@@ -6,7 +6,9 @@ package SP.State_Of_Game;
 
 import SP.Controls.Controls;
 import SP.Game_Objects.*;
+import SP.Game_Objects.For_Enemies.Boss;
 import SP.Game_Objects.For_Enemies.Level1Boss;
+import SP.Game_Objects.For_Enemies.Master;
 import SP.Main_Game.GameFrame;
 import SP.Music.MusicPlayer;
 import SP.Tile_Map.Background;
@@ -39,7 +41,8 @@ public class BossLevel1 extends GameState {
     //audio
     private MusicPlayer musicPlayer;
 
-    private Level1Boss level1Boss;
+//    private Boss boss;
+    private Master master;
 
     public BossLevel1(ManageGS gsManager) {
         super(gsManager);
@@ -79,7 +82,7 @@ public class BossLevel1 extends GameState {
         tileMap.setPosition(0, 0);
         tileMap.setTween(1);
 
-        bg = new Background("/SP/For_the_game/krishia_back.png", 0.1);
+        bg = new Background("/SP/For_the_game/jungle.jpg", 0.1);
 
         //player
         myPlayer = new Player(tileMap);
@@ -103,7 +106,7 @@ public class BossLevel1 extends GameState {
 
         //portal
         portal = new GamePortal(tileMap);
-        portal.setPos(160, 154);
+        portal.setPos(1188, GameFrame.HEIGHT / 2);
 
         //events
         startMoving = true;
@@ -120,7 +123,7 @@ public class BossLevel1 extends GameState {
         //key pressed
         pressedKeys();
 
-        if (!finishLevel && level1Boss.checkDead()) {
+        if (!finishLevel && master.checkDead()) {
             bossDefeated = inBlock = true;
         }
 
@@ -233,9 +236,9 @@ public class BossLevel1 extends GameState {
 
     private void putEnemies() {
         enemies.clear();
-        level1Boss = new Level1Boss(tileMap, myPlayer, enemies, boom);
-        level1Boss.setPos(1000, 500);
-        enemies.add(level1Boss);
+        master = new Master(tileMap, enemies, myPlayer);
+        master.setPos(-1188, 538);
+        enemies.add(master);
     }
 
 
@@ -269,7 +272,7 @@ public class BossLevel1 extends GameState {
         }
         if (countAct == 360) {
             flashing = true;
-            level1Boss.setPos(160, 160);
+            master.setPos(1188, 538);
             BossPower bossPower;
             for (int i = 0; i < 20; i++) {
                 bossPower = new BossPower(tileMap);
@@ -284,7 +287,7 @@ public class BossLevel1 extends GameState {
         if (countAct == 420) {
             eventPortal = inBlock = false;
             countAct = 0;
-            level1Boss.setActive();
+            master.setActive();
         }
     }
 
@@ -295,7 +298,7 @@ public class BossLevel1 extends GameState {
             enemies.clear();
         }
         if (countAct <= 120 && countAct % 15 == 0) {
-            boom.add(new Boom(tileMap, level1Boss.getX(), level1Boss.getY()));
+            boom.add(new Boom(tileMap, master.getX(), master.getY()));
         }
         if (countAct == 180) {
 

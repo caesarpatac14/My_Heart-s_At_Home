@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class    Background {
+public class Background {
     private BufferedImage image;
 
     private double x;
@@ -55,5 +55,11 @@ public class    Background {
         if(x > 0) {
             g.drawImage(image, (int) x - GameFrame.WIDTH, (int) y, null);
         }
+//        if (y < 0) {
+//            g.drawImage(image, (int) x, (int) y + GameFrame.HEIGHT, null);
+//        }
+//        if (y > 0) {
+//            g.drawImage(image, (int) x, (int) y - GameFrame.HEIGHT, null);
+//        }
     }
 }

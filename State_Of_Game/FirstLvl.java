@@ -6,6 +6,7 @@ package SP.State_Of_Game;
 
 import SP.Controls.Controls;
 import SP.Game_Objects.*;
+import SP.Game_Objects.For_Enemies.JumpingEnemy;
 import SP.Game_Objects.For_Enemies.Level1Boss;
 import SP.Game_Objects.For_Enemies.Ogre;
 import SP.Main_Game.GameFrame;
@@ -37,8 +38,6 @@ public class FirstLvl extends GameState {
     //audio
     private MusicPlayer musicPlayer;
 
-    private Level1Boss level1Boss;
-
     public FirstLvl(ManageGS gsManager) {
         super(gsManager);
         initialize();
@@ -56,8 +55,8 @@ public class FirstLvl extends GameState {
         }
 
         myPlayer.setLeft(Controls.controlState[Controls.LEFT]);
-        myPlayer.setRight(Controls.controlState[Controls.RIGHT]);
         myPlayer.setJump(Controls.controlState[Controls.JUMP]);
+        myPlayer.setRight(Controls.controlState[Controls.RIGHT]);
         myPlayer.setFlying(Controls.controlState[Controls.FLY]);
 
         if (Controls.isPressed(Controls.SHOOT)) {
@@ -72,12 +71,12 @@ public class FirstLvl extends GameState {
 
     public void initialize() {
         tileMap = new TileMap(32);
-        tileMap.loadTiles("/SP/For_the_game/lvl1_obs8.png");
-        tileMap.loadMap("/SP/For_the_game/ic.map");
+        tileMap.loadTiles("/SP/For_the_game/lvl4.png");
+        tileMap.loadMap("/SP/For_the_game/level4.map");
         tileMap.setPosition(0, 0);
         tileMap.setTween(1);
 
-        bg = new Background("/SP/For_the_game/krishia_back.png", 0.1);
+        bg = new Background("/SP/For_the_game/jungle.jpg", 0.1);
 
         //player
         myPlayer = new Player(tileMap);
@@ -197,11 +196,11 @@ public class FirstLvl extends GameState {
         //draw transfer
         transfer.draw(g);
 
-        // is player atking
-        myPlayer.checkAtk(enemies);
-
         //draw PlayerStuffs
         hud.draw(g);
+
+        // is player atking
+        myPlayer.checkAtk(enemies);
 
         // draw enemy
         for (int i = 0; i < enemies.size(); i++) {
@@ -223,7 +222,8 @@ public class FirstLvl extends GameState {
     private void putEnemies() {
         enemies = new ArrayList<Enemy>();
 
-        Ogre snail;
+//        Ogre ogre;
+        JumpingEnemy je;
         Point[] points = new Point[] {
                 new Point(200, 535),
                 new Point(170, 535),
@@ -277,9 +277,9 @@ public class FirstLvl extends GameState {
         };
 
         for (int i = 0; i < points.length; i++) {
-            snail = new Ogre(tileMap, myPlayer);
-            snail.setPos(points[i].x, points[i].y);
-            enemies.add(snail);
+            je = new JumpingEnemy(tileMap, enemies,myPlayer);
+            je.setPos(points[i].x, points[i].y);
+            enemies.add(je);
         }
     }
 
@@ -291,7 +291,6 @@ public class FirstLvl extends GameState {
     private void startMoving() {
         countAct++;
         if (countAct == 1) {
-//            System.out.println("na clear?");
             moveBox.clear();
             moveBox.add(new Rectangle(0, 0, GameFrame.WIDTH, GameFrame.HEIGHT / 2));
             moveBox.add(new Rectangle(0, 0, GameFrame.WIDTH / 2, GameFrame.HEIGHT));
@@ -313,26 +312,6 @@ public class FirstLvl extends GameState {
         }
     }
 
-//    private void finishLevel() {
-//        countAct++;
-//
-//        if (countAct == 1) {
-//            moveBox.clear();
-//            moveBox.add(new Rectangle(GameFrame.WIDTH / 2, GameFrame.HEIGHT / 2, 0, 0));
-//        }else if (countAct > 1) {
-//            moveBox.get(0).x -= 8;
-//            moveBox.get(0).x -= 12;
-//            moveBox.get(0).x += 16;
-//            moveBox.get(0).x += 24;
-//        }
-//        if (countAct == 60) {
-//            SavePlayer.setHp(myPlayer.getHP());
-//            SavePlayer.setLife(myPlayer.getLife());
-//            SavePlayer.setTime(myPlayer.getTime());
-//            gsManager.setState(ManageGS.MENUSTATE);
-//        }
-//    }
-
     private void finishLevel() {
         countAct++;
 
@@ -352,8 +331,7 @@ public class FirstLvl extends GameState {
             SavePlayer.setHp(myPlayer.getHP());
             SavePlayer.setLife(myPlayer.getLife());
             SavePlayer.setTime(myPlayer.getTime());
-//            gsManager.setState(ManageGS.LEVEL1BOSS); // FIXME still working on this
-            gsManager.setState(ManageGS.MENUSTATE);
+            gsManager.setState(ManageGS.LEVEL2);
             musicPlayer.stop();
         }
     }
@@ -379,7 +357,7 @@ public class FirstLvl extends GameState {
         if (countAct >= 120) {
             if (myPlayer.getLife() == 0) {
                 musicPlayer.stop();
-                gsManager.setState(ManageGS.MENUSTATE);
+                gsManager.setState(ManageGS.LEVEL2);
             }else {
                 deadNa = inBlock = false;
                 countAct = 0;

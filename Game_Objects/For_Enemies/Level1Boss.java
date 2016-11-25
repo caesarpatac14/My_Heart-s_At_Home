@@ -163,20 +163,20 @@ public class Level1Boss extends Enemy {
         // fly around dropping bombs
         if(steps[step] == 0) {
             stepCount++;
-            if(y > 60) {
-                dy = -4;
+            if(x > 1175) {
+                dx = -4;
             }
-            if(y < 60) {
-                dy = 0;
-                y = 60;
-                dx = -1;
+            if(x < 1175) {
+                dx = 0;
+                x = 1175;
+                dy = -1;
             }
-            if(y == 60) {
-                if(dx == -1 && x < 60) {
-                    dx = 1;
+            if(x == 1175) {
+                if(dy == -1 && y < 470) {
+                    dy = 1;
                 }
-                if(dx == 1 && x > tileMap.getWidth() - 60) {
-                    dx = -1;
+                if(dy == 1 && y > 670) {
+                    dy = -1;
                 }
             }
             if(stepCount % 60 == 0) {
@@ -184,7 +184,7 @@ public class Level1Boss extends Enemy {
                 bossPower.setType(BossPower.gravity);
                 bossPower.setPos(x, y);
                 int dir = Math.random() < 0.5 ? 1 : -1;
-                bossPower.setDirection(dir, 0);
+                bossPower.setDirection(0, dir);
                 enemies.add(bossPower);
             }
             if(stepCount == 559) {
@@ -197,7 +197,7 @@ public class Level1Boss extends Enemy {
         else if(steps[step] == 1) {
             stepCount++;
             if(stepCount == 1) {
-                explosions.add(new Boom(tileMap, (int)x, (int)y));
+//                explosions.add(new Boom(tileMap, (int)x, (int)y));
                 x = -9000;
                 y = 9000;
                 dx = dy = 0;
@@ -205,17 +205,17 @@ public class Level1Boss extends Enemy {
             if(stepCount == 60) {
                 if(player.getX() > tileMap.getWidth() / 2) {
                     x = 30;
-                    y = tileMap.getHeight() - 60;
+                    y = tileMap.getHeight() - 64;
                     dx = 4;
                 }
                 else {
-                    x = tileMap.getWidth() - 30;
-                    y = tileMap.getHeight() - 60;
+                    x = tileMap.getWidth() - 32;
+                    y = tileMap.getHeight() - 64;
                     dx = -4;
                 }
-                explosions.add(new Boom(tileMap, (int)x, (int)y));
+//                explosions.add(new Boom(tileMap, (int)x, (int)y));
             }
-            if((dx == -4 && x < 30) || (dx == 4 && x > tileMap.getWidth() - 30)) {
+            if((dx == -4 && x < 32) || (dx == 4 && x > tileMap.getWidth() - 32)) {
                 stepCount = 0;
                 step++;
                 dx = dy = 0;
@@ -232,7 +232,7 @@ public class Level1Boss extends Enemy {
             if(stepCount == 60) {
                 dy = 7;
             }
-            if(y >= tileMap.getHeight() - 30) {
+            if(y >= tileMap.getHeight() - 64) {
                 dy = 0;
             }
             if(stepCount > 60 && stepCount < 120 && stepCount % 5 == 0 && dy == 0) {

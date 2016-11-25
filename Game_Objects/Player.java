@@ -50,7 +50,7 @@ public class Player extends StuffsInMap {
     private final int[] NUM_OF_FRAMES = {1, 9, 7, 1, 5, 6, 6};
     private final int[] WIDTH_OF_FRAMES = {42, 42, 42, 42, 42, 42, 84};
     private final int[] HEIGHT_OF_FRAMES = {58, 58, 58, 58, 58, 58, 58};
-    private final int[] DELAY_OF_SPRITES = {-1, 3, 6, 5, 2, 2, 2};
+    private final int[] DELAY_OF_SPRITES = {-1, 3, 6, 5, 2, 2, 4};
 
     // for player movement
     private static final int STATIONARY = 0;
@@ -72,13 +72,13 @@ public class Player extends StuffsInMap {
         widthReal = 18;
         heightReal = 50;
 
-        moveSpeed = 0.9;
-        maxSpeed = 2.0;
-        stop = 0.4;
+        moveSpeed = 1.6;
+        maxSpeed = 1.6;
+        stop = 1.35;
         fallSpeed = 0.15;
         maxFallSpd = 4.0;
-        jumpStrt = -4.8;
-        jumpStp = 0.3;
+        jumpStrt = -4.9;
+        jumpStp = 0.4;
         faceRight = true;
 
         life = 3;
@@ -89,7 +89,7 @@ public class Player extends StuffsInMap {
         shootDamage = 5;
         playerPowers = new ArrayList<PlayerPower>();
 
-        damageScratch = 8;
+        damageScratch = 3;
         rangeScratch = 60;
 
         // load sprites

@@ -70,7 +70,7 @@ public class BossPower extends Enemy {
         if (type == vector) {
             // ambot
         }else  if (type == gravity) {
-            dy += 0.2;
+            dx -= 2.0;
         }else if (type == bounce) {
             double dx2 = dx;
             double dy2 = dy;

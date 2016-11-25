@@ -13,10 +13,13 @@ public class ManageGS{
     private Pause pause;
     private boolean isPaused;
 
-    public static final int GSNUM = 3;
+    public static final int GSNUM = 5;
     public static final int MENUSTATE = 0;
     public static final int LEVEL1 = 1;
-//    public static final int LEVEL1BOSS = 2; // FIXME work in progress
+    public static final int LEVEL2 = 2;
+    public static final int LEVEL3 = 3;
+    public static final int LEVEL4 = 4;
+    public static final int LEVEL1BOSS = 5; // FIXME work in progress
 
     public ManageGS() {
         gameStates = new GameState[GSNUM];
@@ -35,9 +38,18 @@ public class ManageGS{
         if (state == LEVEL1) {
             gameStates[state] = new FirstLvl(this);
         }
-//        if (state == LEVEL1BOSS) {
-//            gameStates[state] = new BossLevel1(this);
-//        } // FIXME still working on this
+        if (state == LEVEL2) {
+            gameStates[state] = new SecondLvl(this);
+        }
+        if (state == LEVEL3) {
+            gameStates[state] = new ThirdLvl(this);
+        }
+        if (state == LEVEL4) {
+            gameStates[state] = new FourthLvl(this);
+        }
+        if (state == LEVEL1BOSS) {
+            gameStates[state] = new BossLevel1(this);
+        } // FIXME still working on this
     }
 
     private void stateUnload(int state) {
