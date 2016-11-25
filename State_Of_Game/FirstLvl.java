@@ -71,8 +71,8 @@ public class FirstLvl extends GameState {
 
     public void initialize() {
         tileMap = new TileMap(32);
-        tileMap.loadTiles("/SP/For_the_game/lvl4.png");
-        tileMap.loadMap("/SP/For_the_game/level4.map");
+        tileMap.loadTiles("/SP/For_the_game/lvl1_obs8.png");
+        tileMap.loadMap("/SP/For_the_game/ic.map");
         tileMap.setPosition(0, 0);
         tileMap.setTween(1);
 
@@ -222,8 +222,7 @@ public class FirstLvl extends GameState {
     private void putEnemies() {
         enemies = new ArrayList<Enemy>();
 
-//        Ogre ogre;
-        JumpingEnemy je;
+        Ogre ogre;
         Point[] points = new Point[] {
                 new Point(200, 535),
                 new Point(170, 535),
@@ -277,9 +276,9 @@ public class FirstLvl extends GameState {
         };
 
         for (int i = 0; i < points.length; i++) {
-            je = new JumpingEnemy(tileMap, enemies,myPlayer);
-            je.setPos(points[i].x, points[i].y);
-            enemies.add(je);
+            ogre = new Ogre(tileMap, myPlayer);
+            ogre.setPos(points[i].x, points[i].y);
+            enemies.add(ogre);
         }
     }
 
