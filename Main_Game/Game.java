@@ -12,7 +12,6 @@ public class Game {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(new GameFrame());
         frame.pack();
-//        frame.setResizable(false);
         frame.setVisible(true);
     }
 }

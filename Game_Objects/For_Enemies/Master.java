@@ -1,12 +1,13 @@
 package SP.Game_Objects.For_Enemies;
 
-import SP.Controls.Content;
+import SP.Game_Objects.Boom;
 import SP.Game_Objects.BossPower;
 import SP.Game_Objects.Enemy;
 import SP.Game_Objects.Player;
-import SP.Game_Objects.PlayerPower;
+import SP.Main_Game.GameFrame;
 import SP.Tile_Map.TileMap;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -17,190 +18,189 @@ import java.util.Random;
  */
 public class Master extends Enemy {
 
-    private BufferedImage[] idle;
-    private BufferedImage[] moving;
-    private BufferedImage[] attack;
-    private BufferedImage[] dead;
-    private BufferedImage[] fly;
-    private BufferedImage[] jump;
+    public BufferedImage[] master;
+    private Player player;
+    private ArrayList<Boom> booms;
+    private ArrayList<Enemy> enemies;
 
+    private int[] patterns = {0, 1, 0, 1, 2, 1, 0, 2, 1, 2};
+
+    private boolean bestAtk;
     private boolean isActive;
 
-    private ArrayList<Enemy> enemies;
-    private Player player;
-    private boolean isJumping;
+    private int patternCount;
+    private int pattern;
 
-    public static final int IDLE = 0;
-    public static final int WALK = 1;
-    public static final int JUMP = 2;
-    public static final int FLY = 3;
-    public static final int ATTACK = 4;
-    public static final int DEAD = 5;
+    private double ticks;
 
-    private int attackCount;
-    private int attackDelay = 10;
-    private int steps;
-    private int stepCount = 0;
-
-    public Master(TileMap tileMap, ArrayList<Enemy> enemies, Player player) {
+    public Master(TileMap tileMap, Player player, ArrayList<Boom> booms, ArrayList<Enemy> enemies) {
         super(tileMap);
-        this.enemies = enemies;
         this.player = player;
+        this.booms = booms;
+        this.enemies = enemies;
+
+        width = 40;
+        height = 40;
+        widthReal = 30;
+        heightReal = 40;
 
         hp = maxHP = 100;
-
-        width = 274;
-        height = 166;
-        widthReal = 120;
-        heightReal = 100;
-
-        damage = 1;
-        moveSpeed = maxSpeed = 1.5;
         fallSpeed = 0.15;
         maxFallSpd = 4.0;
-        jumpStrt = -5;
+        jumpStrt = -4.9;
+        jumpStp = 0.4;
 
-        fly = Content.BossEnemy[0];
-        attack = Content.BossEnemy[1];
-        moving = Content.BossEnemy[2];
-        dead = Content.BossEnemy[3];
-        idle = Content.BossEnemy[4];
-        jump = Content.BossEnemy[5];
+        moveSpeed = 1.5;
 
-        animation.setFrames(idle);
-        animation.setPause(-1);
-
-        attackCount = 0;
-
-        isJumping = false;
-        isFalling = true;
-
-    }
-
-    private void getNextPos() {
-        if (left) {
-            dx = -moveSpeed;
-        }else if (right) {
-            dx = moveSpeed;
-        }else {
-            dx = 0;
-        }
-        if (isFalling) {
-            dy += fallSpeed;
-            if (dy > maxFallSpd) {
-                dy = maxFallSpd;
+        try {
+            BufferedImage sprite = ImageIO.read(getClass().getResourceAsStream("/SP/For_the_game/Spirit.gif"));
+            master = new BufferedImage[4];
+            for (int i = 0; i < master.length; i++) {
+                master[i] = sprite.getSubimage(i * width, 0, width, height);
             }
+        }catch (Exception e) {
+            e.printStackTrace();
         }
-        if (isJumping && !isFalling) {
-            dy = jumpStrt;
-        }
+
+        damage = 1;
+        animation.setFrames(master);
+        animation.setPause(1);
+        pattern = 0;
+        patternCount = 0;
     }
 
     public void setActive() {
         isActive = true;
     }
 
-    @Override
     public void update() {
+        System.out.println(hp);
+        if (hp == 0) {
+            return;
+        }
+
+        if (pattern == patterns.length) {
+            pattern = 0;
+        }
+
+        ticks++;
+
         if (isFlinched) {
-            timeFlinched++;
-            if (timeFlinched == 5) {
+            long used = (System.nanoTime() - timeFlinched) / 1000000;
+
+            if (used > 400) {
                 isFlinched = false;
             }
         }
-        getNextPos();
-        checkCollisionTile();
-        setPos(tempX, tempY);
+
+        x += dx;
+        y += dy;
+
+        if (!isActive) {
+            return;
+        }
 
         animation.update();
 
-        if (player.getX() < x) {
-            faceRight = false;
-        }else {
+        player.checkAtk(enemies);
+
+        checkCollisionTile();
+        cornerSolve(x, y);
+
+        if (player.getX() > x) {
             faceRight = true;
+        }else {
+            faceRight = false;
         }
 
-        if (steps == 0) {
-            stepCount++;
-            if (currAct != IDLE) {
-                currAct = IDLE;
-                animation.setFrames(idle);
-                animation.setPause(-1);
+        if (patterns[pattern] == 0) {
+            patternCount++;
+
+            if (patternCount == 310 || patternCount == 490 || patternCount == 90) {
+                BossPower bp = new BossPower(tileMap);
+                bp.setPos(x, y);
+                if (faceRight) {
+                    bp.setDirection(2, 0);
+                }else {
+                    bp.setDirection(-2, 0);
+                }
+                enemies.add(bp);
             }
-//            if (stepCount % 60 == 0) {
-//                if (currAct != ATTACK) {
-//                    currAct = ATTACK;
-//                    animation.setFrames(attack);
-//                    animation.setPause(3);
-//                    BossPower bossPower = new BossPower(tileMap);
-//                    bossPower.setPos(x, y);
-//                    if (faceRight) {
-//                        bossPower.setDirection(4, 0);
-//                    }else {
-//                        bossPower.setDirection(-4, 0);
-//                    }
-//                    enemies.add(bossPower);
-//                }
-//            }
-            attackCount++;
-            if (attackCount >= attackDelay && Math.abs(player.getX() - x) < 60) {
-                steps++;
-                attackCount = 0;
-            }
-        }
-        if (steps == 1) {
-            if (currAct != JUMP) {
-                currAct = JUMP;
-                animation.setFrames(jump);
-                animation.setPause(-1);
-            }
-            isJumping = true;
-            if (faceRight) {
-                left = true;
-            }else {
-                right = true;
+            if (patternCount == 90 || patternCount == 410) {
+                dy += jumpStrt;
+                isJumping = true;
+                isFalling = true;
             }
             if (isFalling) {
-                steps++;
-            }
-        }
-        if (steps == 2) {
-            if (dy > 0 && currAct != ATTACK) {
-                currAct = ATTACK;
-                animation.setFrames(attack);
-                animation.setPause(3);
-                BossPower bossPower = new BossPower(tileMap);
-                bossPower.setPos(x, y);
-                if (faceRight) {
-                    bossPower.setDirection(4, 1);
-                }else {
-                    bossPower.setDirection(-4, 1);
+                dy += fallSpeed;
+                if (dy > 0) {
+                    isJumping = false;
                 }
-                enemies.add(bossPower);
+                if (dy < 0 && !isJumping) {
+                    dy += jumpStp;
+                }
+                if (dy > maxFallSpd) {
+                    dy = maxFallSpd;
+                }
             }
-            if (currAct == ATTACK && animation.playedOnce()) {
-                steps++;
-                currAct = JUMP;
-                animation.setFrames(jump);
-                animation.setPause(-1);
-            }
-        }
-        if (steps == 3) {
-            if (dy == 0) {
-                steps++;
+            if (patternCount == 650) {
+                patternCount = 0;
+                pattern++;
             }
         }
-        if (steps == 4) {
-            steps = 0;
-            left = right = isJumping = false;
+        if (patterns[pattern] == 1) {
+            patternCount++;
+            if (patternCount == 10) {
+                if (!faceRight) {
+                    setDirection(-6, 0);
+                    if (x == 80) {
+                        dx = 0;
+                    }
+                }else {
+                    setDirection(6, 0);
+                    if (x == 1195) {
+                        dx = 0;
+                    }
+                }
+            }
+            if (patternCount == 100) {
+                patternCount = 0;
+                pattern++;
+            }
+        }
+        if (patterns[pattern] == 2) {
+            patternCount++;
+            if (patternCount == 9) {
+                x = tileMap.getWidth() / 2;
+                y = 40;
+            }
+            if (patternCount == 60) {
+                dy = 7;
+            }
+            if (y >= tileMap.getHeight() - 96) {
+                dy = 0;
+            }
+            if (patternCount > 60 && patternCount < 120 && patternCount % 5 == 0 && dy == 0) {
+                BossPower bp = new BossPower(tileMap);
+                bp.setPos(x, y);
+                bp.setDirection(-4, 0);
+                enemies.add(bp);
+                bp = new BossPower(tileMap);
+                bp.setPos(x, y);
+                bp.setDirection(4, 0);
+                enemies.add(bp);
+            }
+            if (patternCount == 150) {
+                patternCount = 0;
+                pattern++;
+            }
         }
     }
 
-    @Override
     public void draw(Graphics2D g) {
         if (isFlinched) {
             if (timeFlinched % 4 < 2) {
-                isFlinched = false;
+                return;
             }
         }
         super.draw(g);

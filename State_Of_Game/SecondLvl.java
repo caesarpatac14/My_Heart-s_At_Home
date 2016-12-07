@@ -147,7 +147,7 @@ public class SecondLvl extends GameState {
         //hud
         playerStuffs = new PlayerStuffs(player);
 
-        musicPlayer = new MusicPlayer("/SP/For_the_game/level2BackMusic.mp3");
+        musicPlayer = new MusicPlayer("/SP/For_the_game/Dungeon Theme.mp3");
         musicPlayer.play(true);
 
         //antagonist
@@ -351,7 +351,7 @@ public class SecondLvl extends GameState {
         if (countAct >= 120) {
             if (player.getLife() == 0) {
                 musicPlayer.stop();
-                gsManager.setState(ManageGS.MENUSTATE);
+                gsManager.setState(ManageGS.GAMEOVER);
             }else {
                 isDead = false;
                 inBlock = false;

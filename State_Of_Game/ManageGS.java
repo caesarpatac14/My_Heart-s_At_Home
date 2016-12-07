@@ -1,5 +1,7 @@
 package SP.State_Of_Game;
 
+import SP.Main_Game.Game;
+
 /**
  * Created by acer on 10/14/2016.
  */
@@ -13,13 +15,16 @@ public class ManageGS{
     private Pause pause;
     private boolean isPaused;
 
-    public static final int GSNUM = 5;
+    public static final int GSNUM = 9;
     public static final int MENUSTATE = 0;
     public static final int LEVEL1 = 1;
     public static final int LEVEL2 = 2;
     public static final int LEVEL3 = 3;
     public static final int LEVEL4 = 4;
     public static final int LEVEL1BOSS = 5; // FIXME work in progress
+    public static final int WINNER = 6;
+    public static final int FINAL = 7;
+    public static final int GAMEOVER = 8;
 
     public ManageGS() {
         gameStates = new GameState[GSNUM];
@@ -50,6 +55,15 @@ public class ManageGS{
         if (state == LEVEL1BOSS) {
             gameStates[state] = new BossLevel1(this);
         } // FIXME still working on this
+        if (state == WINNER) {
+            gameStates[state] = new Winner(this);
+        }
+        if (state == FINAL) {
+            gameStates[state] = new FinalLevel(this);
+        }
+        if (state == GAMEOVER) {
+            gameStates[state] = new GameOver(this);
+        }
     }
 
     private void stateUnload(int state) {

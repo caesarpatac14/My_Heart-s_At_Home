@@ -88,7 +88,9 @@ public class ThirdLvl extends GameState {
         //life, power, etc.
         hud = new PlayerStuffs(player);
 
-        musicPlayer = new MusicPlayer("/SP/For_the_game/level3sound.mp3");
+        musicPlayer = new MusicPlayer("/SP/For_the_game/Volcano Theme.mp3");
+        musicPlayer.play(true);
+        musicPlayer = new MusicPlayer("/SP/For_the_game/flame.mp3");
         musicPlayer.play(true);
 
         //enemies
@@ -379,7 +381,7 @@ public class ThirdLvl extends GameState {
         if (eventCtr >= 120) {
             if (player.getLife() == 0) {
                 musicPlayer.stop();
-                gsManager.setState(ManageGS.MENUSTATE);
+                gsManager.setState(ManageGS.GAMEOVER);
             }else {
                 isDead = inBlock = false;
                 player.minusLife();

@@ -6,8 +6,6 @@ package SP.State_Of_Game;
 
 import SP.Controls.Controls;
 import SP.Game_Objects.*;
-import SP.Game_Objects.For_Enemies.JumpingEnemy;
-import SP.Game_Objects.For_Enemies.Level1Boss;
 import SP.Game_Objects.For_Enemies.Ogre;
 import SP.Main_Game.GameFrame;
 import SP.Music.MusicPlayer;
@@ -88,7 +86,7 @@ public class FirstLvl extends GameState {
         //life, power, etc.
         hud = new PlayerStuffs(myPlayer);
 
-        musicPlayer = new MusicPlayer("/SP/For_the_game/level1.mp3");
+        musicPlayer = new MusicPlayer("/SP/For_the_game/Grassland Theme.mp3");
         musicPlayer.play(true);
 
         //enemies
@@ -114,11 +112,12 @@ public class FirstLvl extends GameState {
 
     public void update() {
 
+//        myPlayer.setShootCost(2);
+
         //key pressed
         pressedKeys();
 
         if (transfer.collides(myPlayer)) {
-//            System.out.println("dqwev");
             finishLevel = inBlock = true;
         }
 
@@ -129,7 +128,6 @@ public class FirstLvl extends GameState {
 
         //play events
         if (startMoving) {
-//            System.out.println(tileMap.getXmax());
             startMoving();
         }
         if (deadNa) {
@@ -154,7 +152,7 @@ public class FirstLvl extends GameState {
         myPlayer.checkAtk(enemies);
 
         //enemies
-        for (int i = 0; i < enemies.size(); i++) {
+        for (int i = 0; i <= enemies.size() - 1; i++) {
             Enemy enemy = enemies.get(i);
 
             enemy.update();
@@ -167,7 +165,7 @@ public class FirstLvl extends GameState {
         }
 
         //boom
-        for (int j = 0; j < boom.size(); j++) {
+        for (int j = 0; j <= boom.size() - 1; j++) {
             boom.get(j).update();
 
             if (boom.get(j).mustRemoveInGame()) {
@@ -297,7 +295,7 @@ public class FirstLvl extends GameState {
             moveBox.add(new Rectangle(GameFrame.WIDTH / 2, 0, GameFrame.WIDTH / 2, GameFrame.HEIGHT));
         }
 
-        if (countAct > 1 && countAct < 60) {
+        if (countAct >= 2 && countAct < 60) {
             moveBox.get(0).height -= 8;
             moveBox.get(1).width -= 12;
             moveBox.get(2).y += 8;
@@ -315,8 +313,8 @@ public class FirstLvl extends GameState {
         countAct++;
 
         if (countAct == 1) {
-            myPlayer.setTransferring(true);
             myPlayer.stopThis();
+            myPlayer.setTransferring(true);
         }else if (countAct == 120) {
             moveBox.clear();
             moveBox.add(new Rectangle(GameFrame.WIDTH / 2, GameFrame.HEIGHT / 2, 0, 0));
@@ -356,7 +354,7 @@ public class FirstLvl extends GameState {
         if (countAct >= 120) {
             if (myPlayer.getLife() == 0) {
                 musicPlayer.stop();
-                gsManager.setState(ManageGS.LEVEL2);
+                gsManager.setState(ManageGS.GAMEOVER);
             }else {
                 deadNa = inBlock = false;
                 countAct = 0;

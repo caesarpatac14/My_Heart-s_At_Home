@@ -69,7 +69,7 @@ public class Player extends StuffsInMap {
 
         width = 42;
         height = 58;
-        widthReal = 18;
+        widthReal = 30;
         heightReal = 50;
 
         moveSpeed = 1.6;
@@ -83,10 +83,10 @@ public class Player extends StuffsInMap {
 
         life = 3;
         hp = maxHP = 5;
-        power = maxPow = 1500;
+        power = maxPow = 15;
 
-        shootCost = 200;
-        shootDamage = 5;
+        shootCost = 2;
+        shootDamage = 8;
         playerPowers = new ArrayList<PlayerPower>();
 
         damageScratch = 3;
@@ -226,6 +226,10 @@ public class Player extends StuffsInMap {
     public void setScratch() {
         scratch = true;
     }
+
+//    public void setShootCost(int cost) {
+//        shootCost = cost;
+//    }
 
     public void setFlying(boolean flying) {
         this.flying = flying;

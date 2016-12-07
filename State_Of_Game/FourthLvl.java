@@ -76,7 +76,7 @@ public class FourthLvl extends GameState {
         tileMap.setPosition(0, 0);
         tileMap.setTween(1);
 
-        background = new Background("/SP/For_the_game/lvl4bg.jpg", 0.1);
+        background = new Background("/SP/For_the_game/sky.jpg", 0.1);
 
         //player
         player = new Player(tileMap);
@@ -88,7 +88,7 @@ public class FourthLvl extends GameState {
         //life, power, etc.
         hud = new PlayerStuffs(player);
 
-        musicPlayer = new MusicPlayer("/SP/For_the_game/level4.mp3");
+        musicPlayer = new MusicPlayer("/SP/For_the_game/Air Theme.mp3");
         musicPlayer.play(true);
 
         //enemies
@@ -377,7 +377,7 @@ public class FourthLvl extends GameState {
             SavePlayer.setHp(player.getHP());
             SavePlayer.setLife(player.getLife());
             SavePlayer.setTime(player.getTime());
-            gsManager.setState(ManageGS.MENUSTATE);
+            gsManager.setState(ManageGS.LEVEL1BOSS);
             musicPlayer.stop();
         }
     }
@@ -403,7 +403,7 @@ public class FourthLvl extends GameState {
         if (eventCtr >= 120) {
             if (player.getLife() == 0) {
                 musicPlayer.stop();
-                gsManager.setState(ManageGS.MENUSTATE);
+                gsManager.setState(ManageGS.GAMEOVER);
             }else {
                 isDead = inBlock = false;
                 eventCtr = 0;
@@ -415,7 +415,7 @@ public class FourthLvl extends GameState {
 
     private void reset() {
         player.reset();
-        player.setPos(77, 1234);
+        player.setPos(700, 1750);
         putEnemies();
         inBlock = true;
         eventCtr = 0;

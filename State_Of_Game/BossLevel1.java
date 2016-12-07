@@ -6,8 +6,6 @@ package SP.State_Of_Game;
 
 import SP.Controls.Controls;
 import SP.Game_Objects.*;
-import SP.Game_Objects.For_Enemies.Boss;
-import SP.Game_Objects.For_Enemies.Level1Boss;
 import SP.Game_Objects.For_Enemies.Master;
 import SP.Main_Game.GameFrame;
 import SP.Music.MusicPlayer;
@@ -37,6 +35,8 @@ public class BossLevel1 extends GameState {
     private boolean eventPortal;
     private boolean flashing;
     private boolean bossDefeated;
+
+    private HashMap<String, MusicPlayer> effects;
 
     //audio
     private MusicPlayer musicPlayer;
@@ -82,7 +82,7 @@ public class BossLevel1 extends GameState {
         tileMap.setPosition(0, 0);
         tileMap.setTween(1);
 
-        bg = new Background("/SP/For_the_game/jungle.jpg", 0.1);
+        bg = new Background("/SP/For_the_game/BossBG.gif", 0.1);
 
         //player
         myPlayer = new Player(tileMap);
@@ -94,8 +94,10 @@ public class BossLevel1 extends GameState {
         //life, power, etc.
         hud = new PlayerStuffs(myPlayer);
 
-        musicPlayer = new MusicPlayer("/SP/For_the_game/level1.mp3");
+        musicPlayer = new MusicPlayer("/SP/For_the_game/bossfightsound.mp3");
         musicPlayer.play(true);
+        effects = new HashMap<String, MusicPlayer>();
+        effects.put("explode", new MusicPlayer("/SP/For_the_game/explode.mp3"));
 
         //enemies
         enemies = new ArrayList<Enemy>();
@@ -153,6 +155,8 @@ public class BossLevel1 extends GameState {
         // update myPlayer
         myPlayer.update();
 
+//        myPlayer.setShootCost(0);
+
         //update map (tiles)
         tileMap.setPosition(GameFrame.WIDTH / 2 - myPlayer.getX(), GameFrame.HEIGHT / 2 - myPlayer.getY());
         tileMap.update();
@@ -180,9 +184,8 @@ public class BossLevel1 extends GameState {
             boom.get(j).update();
 
             if (boom.get(j).mustRemoveInGame()) {
-                boom.remove(j);
-                j--;
-            }
+                boom.remove(j--);
+             }
         }
         portal.update();
     }
@@ -201,9 +204,6 @@ public class BossLevel1 extends GameState {
 
         //portal
         portal.draw(g);
-
-        // is player atking
-//        myPlayer.checkAtk(enemies);
 
         // draw enemy
         for (int i = 0; i < enemies.size(); i++) {
@@ -236,7 +236,7 @@ public class BossLevel1 extends GameState {
 
     private void putEnemies() {
         enemies.clear();
-        master = new Master(tileMap, enemies, myPlayer);
+        master = new Master(tileMap, myPlayer, boom, enemies);
         master.setPos(-1188, 538);
         enemies.add(master);
     }
@@ -276,7 +276,7 @@ public class BossLevel1 extends GameState {
             BossPower bossPower;
             for (int i = 0; i < 20; i++) {
                 bossPower = new BossPower(tileMap);
-                bossPower.setPos(160, 160);
+                bossPower.setPos(1188, 538);
                 bossPower.setDirection(Math.random() * 10 - 5, Math.random() * -2 - 3);
                 enemies.add(bossPower);
             }
@@ -299,6 +299,7 @@ public class BossLevel1 extends GameState {
         }
         if (countAct <= 120 && countAct % 15 == 0) {
             boom.add(new Boom(tileMap, master.getX(), master.getY()));
+            effects.get("explode").play(false);
         }
         if (countAct == 180) {
 
@@ -324,7 +325,7 @@ public class BossLevel1 extends GameState {
             }
         }
 
-        if (countAct > 1 && countAct < 60) {
+        if (countAct >= 2 && countAct <= 59) {
             moveBox.get(0).height -= 8;
             moveBox.get(1).width -= 12;
             moveBox.get(2).y += 8;
@@ -355,7 +356,8 @@ public class BossLevel1 extends GameState {
             SavePlayer.setHp(myPlayer.getHP());
             SavePlayer.setLife(myPlayer.getLife());
             SavePlayer.setTime(myPlayer.getTime());
-            gsManager.setState(ManageGS.MENUSTATE);
+            musicPlayer.stop();
+            gsManager.setState(ManageGS.FINAL);
         }
     }
 
@@ -370,7 +372,7 @@ public class BossLevel1 extends GameState {
         if (countAct == 60) {
             moveBox.clear();
             moveBox.add(new Rectangle(GameFrame.WIDTH / 2, GameFrame.HEIGHT / 2, 0, 0));
-        }else if (countAct > 60) {
+        }else if (countAct >= 61) {
             moveBox.get(0).x -= 12;
             moveBox.get(0).y -= 8;
             moveBox.get(0).width += 24;
@@ -379,7 +381,8 @@ public class BossLevel1 extends GameState {
 
         if (countAct >= 120) {
             if (myPlayer.getLife() == 0) {
-                gsManager.setState(ManageGS.MENUSTATE);
+                gsManager.setState(ManageGS.GAMEOVER);
+                musicPlayer.stop();
             }else {
                 deadNa = inBlock = false;
                 countAct = 0;

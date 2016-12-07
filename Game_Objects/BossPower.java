@@ -45,7 +45,7 @@ public class BossPower extends Enemy {
 
         start = true;
         isFlinched = true;
-        permanent = true;
+        permanent = false;
     }
 
     public void setType(int n) {
